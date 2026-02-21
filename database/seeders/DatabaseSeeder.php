@@ -14,41 +14,49 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Users
-        User::create([
-            'name' => 'Admin Batik',
-            'email' => 'admin@batiknusantara.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin',
-            'is_active' => true,
-            'phone' => '081234567890',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@batiknusantara.com'],
+            [
+                'name' => 'Admin Batik',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'is_active' => true,
+                'phone' => '081234567890',
+            ]
+        );
 
-        User::create([
-            'name' => 'Manager Toko',
-            'email' => 'manager@batiknusantara.com',
-            'password' => Hash::make('password123'),
-            'role' => 'manager',
-            'is_active' => true,
-            'phone' => '081234567891',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'manager@batiknusantara.com'],
+            [
+                'name' => 'Manager Toko',
+                'password' => Hash::make('password123'),
+                'role' => 'manager',
+                'is_active' => true,
+                'phone' => '081234567891',
+            ]
+        );
 
-        User::create([
-            'name' => 'Kasir Satu',
-            'email' => 'kasir1@batiknusantara.com',
-            'password' => Hash::make('password123'),
-            'role' => 'kasir',
-            'is_active' => true,
-            'phone' => '081234567892',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'kasir1@batiknusantara.com'],
+            [
+                'name' => 'Kasir Satu',
+                'password' => Hash::make('password123'),
+                'role' => 'kasir',
+                'is_active' => true,
+                'phone' => '081234567892',
+            ]
+        );
 
-        User::create([
-            'name' => 'Kasir Dua',
-            'email' => 'kasir2@batiknusantara.com',
-            'password' => Hash::make('password123'),
-            'role' => 'kasir',
-            'is_active' => true,
-            'phone' => '081234567893',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'kasir2@batiknusantara.com'],
+            [
+                'name' => 'Kasir Dua',
+                'password' => Hash::make('password123'),
+                'role' => 'kasir',
+                'is_active' => true,
+                'phone' => '081234567893',
+            ]
+        );
 
         // Categories
         $categories = [
