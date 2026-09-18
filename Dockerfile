@@ -24,7 +24,11 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-d
 
 RUN chmod -R 777 storage bootstrap/cache
 
+# Ensure database file exists for sqlite
+RUN touch database/database.sqlite
+
 ENV PORT=8080
 EXPOSE 8080
 
-CMD php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT}
+# Automatically run migrations and seed on container start
+CMD touch database/database.sqlite && php artisan migrate:fresh --seed --force && php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT}
