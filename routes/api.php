@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/midtrans/callback', [TransactionController::class, 'midtransCallback']);
 
+// Storefront routes
+Route::get('/storefront/products', [\App\Http\Controllers\Api\StorefrontController::class, 'products']);
+Route::get('/storefront/categories', [\App\Http\Controllers\Api\StorefrontController::class, 'categories']);
+Route::post('/storefront/checkout', [\App\Http\Controllers\Api\StorefrontController::class, 'checkout']);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -33,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Transactions
     Route::get('/transactions/report/summary', [TransactionController::class, 'report']);
+    Route::get('/transactions/online/pending', [TransactionController::class, 'pendingOnline']);
+    Route::put('/transactions/{transaction}/confirm', [TransactionController::class, 'confirmOnlineOrder']);
     Route::get('/transactions/{transaction}/sync', [TransactionController::class, 'syncStatus']);
     Route::apiResource('transactions', TransactionController::class)->only(['index', 'store', 'show']);
 

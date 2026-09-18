@@ -320,4 +320,39 @@ class TransactionController extends Controller
             ]
         ]);
     }
+
+    public function pendingOnline(Request $request)
+    {
+        $transactions = Transaction::with(['items'])
+            ->where('payment_status', 'pending')
+            ->where('notes', 'Online Store Order')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $transactions
+        ]);
+    }
+
+    public function confirmOnlineOrder(Transaction $transaction)
+    {
+        if ($transaction->payment_status === 'success') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesanan ini sudah dikonfirmasi sebelumnya.'
+            ], 400);
+        }
+
+        $transaction->update([
+            'payment_status' => 'success',
+            'paid_at' => now()
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil dikonfirmasi.',
+            'data' => $transaction
+        ]);
+    }
 }

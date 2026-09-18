@@ -9,6 +9,9 @@
 .env
 .env.backup
 .env.production
+.env.clean
+.env.*
+!.env.example
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -21,3 +24,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Temporary scripts
+check*.php
+fix_cat*.php
+swap.php
+update_*.php
+public/check_images.html

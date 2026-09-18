@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         // Users
         User::updateOrCreate(
-            ['email' => 'admin@batiknusantara.com'],
+            ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin Batik',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('password'),
                 'role' => 'admin',
                 'is_active' => true,
                 'phone' => '081234567890',
@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'manager@batiknusantara.com'],
+            ['email' => 'manager@example.com'],
             [
                 'name' => 'Manager Toko',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('password'),
                 'role' => 'manager',
                 'is_active' => true,
                 'phone' => '081234567891',
@@ -37,11 +37,11 @@ class DatabaseSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'kasir1@batiknusantara.com'],
+            ['email' => 'kasir@example.com'],
             [
-                'name' => 'Kasir Satu',
-                'password' => Hash::make('password123'),
-                'role' => 'kasir',
+                'name' => 'Kasir Offline',
+                'password' => Hash::make('password'),
+                'role' => 'kasir_offline',
                 'is_active' => true,
                 'phone' => '081234567892',
             ]
@@ -50,9 +50,9 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'kasir2@batiknusantara.com'],
             [
-                'name' => 'Kasir Dua',
+                'name' => 'Kasir Online',
                 'password' => Hash::make('password123'),
-                'role' => 'kasir',
+                'role' => 'kasir_online',
                 'is_active' => true,
                 'phone' => '081234567893',
             ]
