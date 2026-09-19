@@ -120,8 +120,6 @@ class TransactionController extends Controller
                 $transaction->items()->create($item);
             }
 
-            DB::commit();
-
             // Create Midtrans token if payment via midtrans
             if ($validated['payment_method'] === 'midtrans') {
                 $transaction->load('items');
@@ -261,9 +259,10 @@ class TransactionController extends Controller
         $dateFrom = $request->date_from ?? now()->startOfMonth()->toDateString();
         $dateTo = $request->date_to ?? now()->toDateString();
 
+        // Include all transactions (success + pending) so online orders appear in reports
         $transactions = Transaction::whereDate('created_at', '>=', $dateFrom)
             ->whereDate('created_at', '<=', $dateTo)
-            ->where('payment_status', 'success')
+            ->whereIn('payment_status', ['success', 'pending'])
             ->with(['items', 'kasir'])
             ->get();
 
@@ -271,11 +270,11 @@ class TransactionController extends Controller
         $totalTransactions = $transactions->count();
         $avgTransaction = $totalTransactions > 0 ? $totalRevenue / $totalTransactions : 0;
 
-        // Daily breakdown
+        // Daily breakdown - use PostgreSQL DATE() cast instead of SQLite strftime()
         $dailyReport = Transaction::whereDate('created_at', '>=', $dateFrom)
             ->whereDate('created_at', '<=', $dateTo)
-            ->where('payment_status', 'success')
-            ->selectRaw('strftime("%Y-%m-%d", created_at) as date, COUNT(*) as count, SUM(total) as revenue')
+            ->whereIn('payment_status', ['success', 'pending'])
+            ->selectRaw('created_at::date as date, COUNT(*) as count, SUM(total) as revenue')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -284,7 +283,7 @@ class TransactionController extends Controller
         $topProducts = TransactionItem::whereHas('transaction', function($q) use ($dateFrom, $dateTo) {
             $q->whereDate('created_at', '>=', $dateFrom)
               ->whereDate('created_at', '<=', $dateTo)
-              ->where('payment_status', 'success');
+              ->whereIn('payment_status', ['success', 'pending']);
         })
         ->selectRaw('product_name, SUM(quantity) as total_qty, SUM(subtotal) as total_revenue')
         ->groupBy('product_name')
@@ -295,7 +294,7 @@ class TransactionController extends Controller
         // Kasir performance
         $kasirReport = Transaction::whereDate('created_at', '>=', $dateFrom)
             ->whereDate('created_at', '<=', $dateTo)
-            ->where('payment_status', 'success')
+            ->whereIn('payment_status', ['success', 'pending'])
             ->with('kasir:id,name')
             ->selectRaw('kasir_id, COUNT(*) as count, SUM(total) as revenue')
             ->groupBy('kasir_id')
