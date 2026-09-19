@@ -10,13 +10,20 @@ $directories = [
     '/tmp/storage/framework/sessions',
     '/tmp/storage/framework/testing',
     '/tmp/storage/framework/views',
-    '/tmp/storage/logs'
+    '/tmp/storage/logs',
+    '/tmp/storage/bootstrap/cache'
 ];
 foreach ($directories as $directory) {
     if (!is_dir($directory)) {
         @mkdir($directory, 0755, true);
     }
 }
+
+// Override Cache Paths
+$_ENV['APP_PACKAGES_CACHE'] = '/tmp/storage/bootstrap/cache/packages.php';
+$_ENV['APP_SERVICES_CACHE'] = '/tmp/storage/bootstrap/cache/services.php';
+putenv('APP_PACKAGES_CACHE=' . $_ENV['APP_PACKAGES_CACHE']);
+putenv('APP_SERVICES_CACHE=' . $_ENV['APP_SERVICES_CACHE']);
 
 require __DIR__.'/../vendor/autoload.php';
 
