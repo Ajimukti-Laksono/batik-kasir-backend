@@ -29,7 +29,8 @@ Route::get('/setup-database-infinityfree', function () {
         config(['database.connections.pgsql.url' => $nonPooledUrl]);
         DB::purge('pgsql');
 
-        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
         return response()->json(['message' => 'Database successfully migrated and seeded for InfinityFree!']);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
