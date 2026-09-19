@@ -15,7 +15,15 @@ Route::any('/ping', function (Illuminate\Http\Request $request) {
         'db_config' => config('database.connections.pgsql'),
         'database_url' => env('DATABASE_URL'),
         'postgres_url' => env('POSTGRES_URL'),
-        'algos' => function_exists('password_algos') ? password_algos() : 'unknown'
+        'algos' => function_exists('password_algos') ? password_algos() : 'unknown',
+        'bcrypt_rounds' => env('BCRYPT_ROUNDS'),
+        'hash_test' => (function() {
+            try {
+                return password_hash('test', PASSWORD_BCRYPT, ['cost' => env('BCRYPT_ROUNDS', 12)]);
+            } catch (\Error $e) {
+                return $e->getMessage();
+            }
+        })()
     ]);
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
