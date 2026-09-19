@@ -47,4 +47,10 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 // Force Laravel to use the writable /tmp folder
 $app->useStoragePath('/tmp/storage');
 
-$app->handleRequest(Request::capture());
+try {
+    $app->handleRequest(Request::capture());
+} catch (\Throwable $e) {
+    echo "<h1>Debug Trace</h1>";
+    echo "<strong>Error:</strong> " . $e->getMessage() . "<br><br>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+}
