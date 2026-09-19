@@ -4,8 +4,6 @@ use Illuminate\Http\Request;
 define('LARAVEL_START', microtime(true));
 
 // Setup tmp storage directories for Vercel Serverless (Read-Only bypass)
-// Force JSON response to bypass Ignition HTML and get raw trace
-$_SERVER['HTTP_ACCEPT'] = 'application/json';
 
 $directories = [
     '/tmp/storage/app',
@@ -55,11 +53,4 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 // Force Laravel to use the writable /tmp folder
 $app->useStoragePath('/tmp/storage');
 
-try {
-    $response = $app->handleRequest(Request::capture());
-    $response->send();
-} catch (\Throwable $e) {
-    echo "<h1>Debug Trace</h1>";
-    echo "<strong>Error:</strong> " . $e->getMessage() . "<br><br>";
-    echo "<pre>" . $e->getTraceAsString() . "</pre>";
-}
+$app->handleRequest(Request::capture());
