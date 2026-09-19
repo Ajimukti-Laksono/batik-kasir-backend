@@ -12,11 +12,9 @@ use Illuminate\Support\Facades\Route;
 Route::any('/ping', function (Illuminate\Http\Request $request) {
     return response()->json([
         'status' => 'ok',
-        'message' => 'Laravel is running on Vercel!',
-        'post' => $_POST,
-        'input' => file_get_contents('php://input'),
-        'request_all' => $request->all(),
-        'content_type' => $request->header('Content-Type')
+        'db_config' => config('database.connections.pgsql'),
+        'database_url' => env('DATABASE_URL'),
+        'postgres_url' => env('POSTGRES_URL')
     ]);
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
