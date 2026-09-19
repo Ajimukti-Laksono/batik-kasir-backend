@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 define('LARAVEL_START', microtime(true));
 
 // Setup tmp storage directories for Vercel Serverless (Read-Only bypass)
+// Force JSON response to bypass Ignition HTML and get raw trace
+$_SERVER['HTTP_ACCEPT'] = 'application/json';
+
 $directories = [
     '/tmp/storage/app',
     '/tmp/storage/framework/cache/data',
