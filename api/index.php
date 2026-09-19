@@ -6,6 +6,7 @@ define('LARAVEL_START', microtime(true));
 // Setup tmp storage directories for Vercel Serverless (Read-Only bypass)
 // Fix Laravel stripping the /api prefix because the script is in the /api folder
 $_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['HTTP_ACCEPT'] = 'application/json';
 
 $directories = [
     '/tmp/storage/app',
