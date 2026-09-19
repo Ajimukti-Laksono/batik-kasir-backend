@@ -85,14 +85,19 @@ class ProductController extends Controller
             'min_stock' => 'required|integer|min:0',
             'barcode' => 'nullable|string|unique:products,barcode,' . $product->id,
             'image' => 'nullable|image|max:2048',
+            'image_url' => 'nullable|url',
             'is_active' => 'boolean',
         ]);
 
         if ($request->hasFile('image')) {
             if ($product->image) Storage::disk('public')->delete($product->image);
             $validated['image'] = $request->file('image')->store('products', 'public');
+        } elseif ($request->image_url) {
+            // Support direct URL for images (useful for serverless/Vercel)
+            $validated['image'] = $request->image_url;
         }
 
+        unset($validated['image_url']);
         $product->update($validated);
 
         return response()->json([
