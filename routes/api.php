@@ -14,7 +14,8 @@ Route::any('/ping', function (Illuminate\Http\Request $request) {
         'status' => 'ok',
         'db_config' => config('database.connections.pgsql'),
         'database_url' => env('DATABASE_URL'),
-        'postgres_url' => env('POSTGRES_URL')
+        'postgres_url' => env('POSTGRES_URL'),
+        'algos' => function_exists('password_algos') ? password_algos() : 'unknown'
     ]);
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
