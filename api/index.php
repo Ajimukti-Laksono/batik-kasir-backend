@@ -65,7 +65,7 @@ if ($dbUrl) {
     putenv("DB_CONNECTION=pgsql");
 
     // Wipe stale DB vars that might take precedence or interfere
-    $staleVars = ['DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD'];
+    $staleVars = ['DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'BCRYPT_ROUNDS'];
     foreach ($staleVars as $var) {
         unset($_ENV[$var]);
         unset($_SERVER[$var]);
