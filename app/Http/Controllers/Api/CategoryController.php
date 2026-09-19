@@ -46,6 +46,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+            'image_url' => 'nullable|url',
             'is_active' => 'boolean',
         ]);
         
@@ -58,8 +59,11 @@ class CategoryController extends Controller
             }
             $path = $request->file('image')->store('categories', 'public');
             $validated['image'] = $path;
+        } elseif ($request->image_url) {
+            $validated['image'] = $request->image_url;
         }
 
+        unset($validated['image_url']);
         $category->update($validated);
         return response()->json(['success' => true, 'message' => 'Kategori diperbarui', 'data' => $category]);
     }
