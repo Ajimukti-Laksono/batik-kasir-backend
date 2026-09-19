@@ -68,6 +68,7 @@ if ($dbUrl) {
     $staleVars = ['DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD'];
     foreach ($staleVars as $var) {
         unset($_ENV[$var]);
+        unset($_SERVER[$var]);
         putenv($var); // Remove entirely instead of empty string
     }
 }
