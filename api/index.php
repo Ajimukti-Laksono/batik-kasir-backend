@@ -49,6 +49,20 @@ foreach ($defaults as $key => $value) {
     }
 }
 
+// Force Laravel to use Vercel's injected DATABASE_URL (from Neon integration)
+// This overrides any stale DB_HOST/DB_PASSWORD env vars the user might have left behind.
+if (!empty($_ENV['DATABASE_URL'])) {
+    $_ENV['DB_URL'] = $_ENV['DATABASE_URL'];
+    putenv("DB_URL=" . $_ENV['DATABASE_URL']);
+    $_ENV['DB_CONNECTION'] = 'pgsql';
+    putenv("DB_CONNECTION=pgsql");
+} elseif (!empty(getenv('DATABASE_URL'))) {
+    $_ENV['DB_URL'] = getenv('DATABASE_URL');
+    putenv("DB_URL=" . getenv('DATABASE_URL'));
+    $_ENV['DB_CONNECTION'] = 'pgsql';
+    putenv("DB_CONNECTION=pgsql");
+}
+
 require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
