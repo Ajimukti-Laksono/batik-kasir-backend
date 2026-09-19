@@ -25,6 +25,21 @@ $_ENV['APP_SERVICES_CACHE'] = '/tmp/storage/bootstrap/cache/services.php';
 putenv('APP_PACKAGES_CACHE=' . $_ENV['APP_PACKAGES_CACHE']);
 putenv('APP_SERVICES_CACHE=' . $_ENV['APP_SERVICES_CACHE']);
 
+// Fix empty driver issues from Vercel UI overriding with empty strings
+$defaults = [
+    'LOG_CHANNEL' => 'stderr',
+    'CACHE_STORE' => 'file',
+    'CACHE_DRIVER' => 'file',
+    'SESSION_DRIVER' => 'array',
+    'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views'
+];
+foreach ($defaults as $key => $value) {
+    if (empty($_ENV[$key]) && empty(getenv($key))) {
+        $_ENV[$key] = $value;
+        putenv("$key=$value");
+    }
+}
+
 require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
