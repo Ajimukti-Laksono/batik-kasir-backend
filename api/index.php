@@ -56,7 +56,8 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->useStoragePath('/tmp/storage');
 
 try {
-    $app->handleRequest(Request::capture());
+    $response = $app->handleRequest(Request::capture());
+    $response->send();
 } catch (\Throwable $e) {
     echo "<h1>Debug Trace</h1>";
     echo "<strong>Error:</strong> " . $e->getMessage() . "<br><br>";
