@@ -9,8 +9,15 @@ use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
-Route::get('/ping', function () {
-    return response()->json(['status' => 'ok', 'message' => 'Laravel is running on Vercel!']);
+Route::any('/ping', function (Illuminate\Http\Request $request) {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Laravel is running on Vercel!',
+        'post' => $_POST,
+        'input' => file_get_contents('php://input'),
+        'request_all' => $request->all(),
+        'content_type' => $request->header('Content-Type')
+    ]);
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/midtrans/callback', [TransactionController::class, 'midtransCallback']);
