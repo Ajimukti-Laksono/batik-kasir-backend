@@ -9,8 +9,21 @@ use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
+Route::get('/ping', function () {
+    return response()->json(['status' => 'ok', 'message' => 'Laravel is running on Vercel!']);
+});
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/midtrans/callback', [TransactionController::class, 'midtransCallback']);
+
+// InfinityFree setup route
+Route::get('/setup-database-infinityfree', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        return response()->json(['message' => 'Database successfully migrated and seeded for InfinityFree!']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
 
 // Storefront routes
 Route::get('/storefront/products', [\App\Http\Controllers\Api\StorefrontController::class, 'products']);
