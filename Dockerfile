@@ -9,9 +9,10 @@ RUN apk add --no-cache \
     unzip \
     sqlite-dev \
     oniguruma-dev \
-    libzip-dev
+    libzip-dev \
+    postgresql-dev
 
-RUN docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql pdo_sqlite mbstring exif pcntl bcmath gd zip
 
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
