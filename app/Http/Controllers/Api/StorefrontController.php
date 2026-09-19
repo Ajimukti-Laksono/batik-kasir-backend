@@ -42,7 +42,6 @@ class StorefrontController extends Controller
             'payment_method' => 'required|string',
         ]);
 
-        DB::beginTransaction();
         try {
             $subtotal = 0;
             $itemsData = [];
@@ -102,21 +101,17 @@ class StorefrontController extends Controller
                 'midtrans_order_id' => $transaction->invoice_number
             ]);
 
-            foreach ($itemsData as $item) {
-                $transaction->items()->create($item);
-            }
-
-            DB::commit();
+            // Save items
+            $transaction->items()->createMany($itemsData);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Pesanan berhasil dibuat!',
-                'data' => $transaction->load(['items'])
+                'message' => 'Pesanan berhasil dibuat',
+                'data' => $transaction
             ], 201);
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Storefront Checkout Error', ['message' => $e->getMessage()]);
+            Log::error('Storefront Checkout Error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Terjadi kesalahan sistem: ' . $e->getMessage()], 500);
         }
     }

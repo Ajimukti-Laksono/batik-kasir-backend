@@ -56,7 +56,6 @@ class TransactionController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        DB::beginTransaction();
         try {
             // Calculate totals
             $subtotal = 0;
@@ -147,8 +146,6 @@ class TransactionController extends Controller
                     ], 201);
                 }
 
-                // Rollback if midtrans fails
-                DB::rollBack();
                 return response()->json(['success' => false, 'message' => $midtransResult['message']], 500);
             }
 
@@ -159,7 +156,6 @@ class TransactionController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('Transaction Error', ['message' => $e->getMessage()]);
             return response()->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
