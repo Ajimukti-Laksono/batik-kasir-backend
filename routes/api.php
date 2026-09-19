@@ -23,6 +23,12 @@ Route::post('/midtrans/callback', [TransactionController::class, 'midtransCallba
 // InfinityFree setup route
 Route::get('/setup-database-infinityfree', function () {
     try {
+        // Neon pgBouncer pooler doesn't support migrations inside transactions properly.
+        // We must override the DB connection to the non-pooled URL just for this command.
+        $nonPooledUrl = str_replace('-pooler', '', env('DATABASE_URL'));
+        config(['database.connections.pgsql.url' => $nonPooledUrl]);
+        DB::purge('pgsql');
+
         \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
         return response()->json(['message' => 'Database successfully migrated and seeded for InfinityFree!']);
     } catch (\Exception $e) {
