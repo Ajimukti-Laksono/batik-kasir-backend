@@ -34,6 +34,11 @@ $defaults = [
     'CACHE_STORE' => 'file',
     'CACHE_DRIVER' => 'file',
     'SESSION_DRIVER' => 'array',
+    'QUEUE_CONNECTION' => 'sync',
+    'BROADCAST_CONNECTION' => 'log',
+    'FILESYSTEM_DISK' => 'local',
+    'MAIL_MAILER' => 'log',
+    'APP_MAINTENANCE_DRIVER' => 'file',
     'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views'
 ];
 foreach ($defaults as $key => $value) {
